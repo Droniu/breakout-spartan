@@ -7,7 +7,7 @@
 -- \   \   \/     Version : 14.7
 --  \   \         Application : sch2hdl
 --  /   /         Filename : breakout.vhf
--- /___/   /\     Timestamp : 04/07/2021 22:12:52
+-- /___/   /\     Timestamp : 04/07/2021 22:39:54
 -- \   \  /  \ 
 --  \___\/\___\ 
 --
@@ -36,7 +36,6 @@ end breakout;
 
 architecture BEHAVIORAL of breakout is
    signal XLXN_2    : std_logic_vector (2 downto 0);
-   signal XLXN_3    : std_logic_vector (9 downto 0);
    signal XLXN_4    : std_logic_vector (9 downto 0);
    signal XLXN_5    : std_logic_vector (8 downto 0);
    component driver
@@ -61,7 +60,7 @@ begin
    XLXI_1 : driver
       port map (CLK_50MHz=>CLK_50MHz,
                 RGB(2 downto 0)=>XLXN_2(2 downto 0),
-                PIX_X(9 downto 0)=>XLXN_3(9 downto 0),
+                PIX_X(9 downto 0)=>XLXN_4(9 downto 0),
                 PIX_Y(8 downto 0)=>XLXN_5(8 downto 0),
                 VGA_B=>VGA_B,
                 VGA_G=>VGA_G,

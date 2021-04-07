@@ -56,7 +56,7 @@
             <blockpin signalname="VGA_B" name="VGA_B" />
             <blockpin signalname="VGA_HS" name="VGA_HS" />
             <blockpin signalname="VGA_VS" name="VGA_VS" />
-            <blockpin signalname="XLXN_3(9:0)" name="PIX_X(9:0)" />
+            <blockpin signalname="XLXN_4(9:0)" name="PIX_X(9:0)" />
             <blockpin signalname="XLXN_5(8:0)" name="PIX_Y(8:0)" />
         </block>
         <block symbolname="picture" name="XLXI_2">
@@ -77,13 +77,12 @@
         </branch>
         <instance x="1152" y="864" name="XLXI_2" orien="R0">
         </instance>
-        <branch name="XLXN_3(9:0)">
-            <wire x2="2640" y1="704" y2="704" x1="2368" />
-        </branch>
         <branch name="XLXN_4(9:0)">
             <wire x2="992" y1="768" y2="1168" x1="992" />
             <wire x2="2656" y1="1168" y2="1168" x1="992" />
             <wire x2="1152" y1="768" y2="768" x1="992" />
+            <wire x2="2640" y1="704" y2="704" x1="2368" />
+            <wire x2="2656" y1="704" y2="704" x1="2640" />
             <wire x2="2656" y1="704" y2="1168" x1="2656" />
         </branch>
         <branch name="XLXN_5(8:0)">

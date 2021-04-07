@@ -55,7 +55,7 @@ begin
 	x_int <= to_integer(unsigned(PIX_X));
 	y_int <= to_integer(unsigned(PIX_Y));
 
-	RGB <= RED when x_int >= 0 and x_int < (640/2) and y_int >= 40 and y_int <= 60 else
-		BLACK;
+	RGB <= 	RED when x_int >= 0 and x_int < 64 and y_int > 40 and y_int <= 60 else
+				BLACK;
 
 end Behavioral;

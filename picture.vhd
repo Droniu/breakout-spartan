@@ -55,15 +55,15 @@ begin
 	x_int <= to_integer(unsigned(PIX_X));
 	y_int <= to_integer(unsigned(PIX_Y));
 
-	RGB <=  RED when x_int > 0   and x_int <= 71  and y_int >= 40 and y_int <= 60 else
-		    RED when x_int > 71  and x_int <= 142 and y_int >= 40 and y_int <= 60 else
-		    RED when x_int > 142 and x_int <= 213 and y_int >= 40 and y_int <= 60 else
-		    RED when x_int > 213 and x_int <= 284 and y_int >= 40 and y_int <= 60 else
-		    RED when x_int > 284 and x_int <= 355 and y_int >= 40 and y_int <= 60 else
-		    RED when x_int > 355 and x_int <= 426 and y_int >= 40 and y_int <= 60 else
-		    RED when x_int > 426 and x_int <= 497 and y_int >= 40 and y_int <= 60 else
-		    RED when x_int > 497 and x_int <= 568 and y_int >= 40 and y_int <= 60 else
-			RED when x_int > 568 and x_int <= 639 and y_int >= 40 and y_int <= 60 else
+	RGB <=  RED when x_int > 0   and x_int < 71  and y_int >= 40 and y_int <= 60 else
+		    RED when x_int > 71  and x_int < 142 and y_int >= 40 and y_int <= 60 else
+		    RED when x_int > 142 and x_int < 213 and y_int >= 40 and y_int <= 60 else
+		    RED when x_int > 213 and x_int < 284 and y_int >= 40 and y_int <= 60 else
+		    RED when x_int > 284 and x_int < 355 and y_int >= 40 and y_int <= 60 else
+		    RED when x_int > 355 and x_int < 426 and y_int >= 40 and y_int <= 60 else
+		    RED when x_int > 426 and x_int < 497 and y_int >= 40 and y_int <= 60 else
+		    RED when x_int > 497 and x_int < 568 and y_int >= 40 and y_int <= 60 else
+			RED when x_int > 568 and x_int < 639 and y_int >= 40 and y_int <= 60 else
 		    BLACK;
 
 end Behavioral;

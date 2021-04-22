@@ -36,13 +36,17 @@ entity picture is
 				  TILES_IN_ROW : positive := 9 );
     Port ( PIX_X : in  STD_LOGIC_VECTOR (PIX_X_BITS - 1 downto 0);
            PIX_Y : in  STD_LOGIC_VECTOR (PIX_Y_BITS - 1 downto 0);
+			  ENABLED_TILES : in STD_LOGIC_VECTOR ((TILE_ROWS * TILES_IN_ROW) - 1 downto 0);
+			  BALL_X : in STD_LOGIC_VECTOR (PIX_X_BITS - 1 downto 0);
+			  BALL_Y : in  STD_LOGIC_VECTOR (PIX_Y_BITS - 1 downto 0);
+			  PLATFORM_X : in STD_LOGIC_VECTOR (PIX_X_BITS - 1 downto 0);
            RGB : out  STD_LOGIC_VECTOR (2 downto 0));
 end picture;
 
 architecture Behavioral of picture is
 	subtype t_color is std_logic_vector(2 downto 0);
-	subtype x_coord is integer range 0 to (PIX_X_BITS ** 2) - 1;
-	subtype y_coord is integer range 0 to (PIX_Y_BITS ** 2) - 1;
+	subtype x_coord is integer range 0 to (2 ** PIX_X_BITS) - 1;
+	subtype y_coord is integer range 0 to (2 ** PIX_Y_BITS) - 1;
 	subtype tiles_status is std_logic_vector((TILE_ROWS * TILES_IN_ROW) - 1 downto 0); 
 	
 	constant WHITE : t_color := "111";
@@ -54,14 +58,24 @@ architecture Behavioral of picture is
 	constant CYAN : t_color := "011";
 	constant MAGENTA : t_color := "101";
 	
-	constant FIRST_ROW_Y_OFFSET : integer := 40;
-	constant TILE_HEIGHT : integer := 20;
-	constant TILE_WIDTH : integer := 71;
+	constant FIRST_ROW_Y_OFFSET : positive := 40;
+	constant TILE_HEIGHT : positive := 20;
+	constant TILE_WIDTH : positive := 71;
+	constant BALL_RADIUS : positive := 15;
+	constant PLATFORM_HEIGHT : positive := 14;
+	constant PLATFORM_WIDTH : positive := 100;
+	constant PLATFORM_Y : positive := 440;
 	
-	constant ENABLED_TILES : tiles_status := "100110111110111101110010101101011101110111101011011101";
+	--constant ENABLED_TILES : tiles_status := "100110111110111101110010101101011101110111101011011101";
+	--constant ball_x : x_coord := 200;
+	--constant ball_y : y_coord := 200;
+	--constant platform_x : x_coord := 350;
 	
 	signal x_int : x_coord;
 	signal y_int : y_coord;
+	signal ball_x_int : x_coord;
+	signal ball_y_int : y_coord;
+	signal platform_x_int : x_coord;
 	
 	function tiles_row( row_number : integer range 0 to 10;
 							  x_int : x_coord;
@@ -84,9 +98,28 @@ architecture Behavioral of picture is
 		return ret_bool;
 	end tiles_row;
 	
+	function ball( ball_x : x_coord;
+						ball_y : y_coord;
+						x_int : x_coord;
+						y_int : y_coord ) return boolean is
+	begin
+		return (x_int - ball_x)*(x_int - ball_x) + (y_int - ball_y)*(y_int - ball_y) <= BALL_RADIUS**2;
+	end ball;
+	
+	function platform( platform_x : x_coord;
+							 x_int : x_coord;
+							 y_int : y_coord ) return boolean is
+	begin
+		return (x_int > (platform_x - (PLATFORM_WIDTH/2)) and x_int < (platform_x + (PLATFORM_WIDTH/2)) and
+				  y_int > (PLATFORM_Y - (PLATFORM_HEIGHT/2)) and y_int < (PLATFORM_Y + (PLATFORM_HEIGHT/2)));
+	end platform;
+	
 begin
 	x_int <= to_integer(unsigned(PIX_X));
 	y_int <= to_integer(unsigned(PIX_Y));
+	ball_x_int <= to_integer(unsigned(BALL_X));
+	ball_y_int <= to_integer(unsigned(BALL_Y));
+	platform_x_int <= to_integer(unsigned(PLATFORM_X));
 
 	RGB <=  RED when tiles_row(0, x_int, y_int, ENABLED_TILES) else
 			  YELLOW when tiles_row(1, x_int, y_int, ENABLED_TILES) else
@@ -94,6 +127,10 @@ begin
 			  CYAN when tiles_row(3, x_int, y_int, ENABLED_TILES) else
 			  BLUE when tiles_row(4, x_int, y_int, ENABLED_TILES) else
 			  MAGENTA when tiles_row(5, x_int, y_int, ENABLED_TILES) else
+			  
+			  WHITE when ball(ball_x_int, ball_y_int, x_int, y_int) else
+			  CYAN when platform(platform_x_int, x_int, y_int) else
+			  
 			  BLACK;
 
 end Behavioral;

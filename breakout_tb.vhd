@@ -14,6 +14,10 @@ ARCHITECTURE behavioral OF breakout_breakout_sch_tb IS
 
    COMPONENT breakout
    PORT( CLK_50MHz	:	IN	STD_LOGIC; 
+			 ENABLED_TILES : IN STD_LOGIC_VECTOR;
+			 BALL_X : IN STD_LOGIC_VECTOR;
+			 BALL_Y : IN  STD_LOGIC_VECTOR;
+			 PLATFORM_X : IN STD_LOGIC_VECTOR;
           VGA_R	:	OUT	STD_LOGIC; 
           VGA_G	:	OUT	STD_LOGIC; 
           VGA_B	:	OUT	STD_LOGIC; 
@@ -22,11 +26,21 @@ ARCHITECTURE behavioral OF breakout_breakout_sch_tb IS
    END COMPONENT;
 
    SIGNAL CLK_50MHZ	:	STD_LOGIC;
+	SIGNAL ENABLED_TILES : STD_LOGIC_VECTOR(53 downto 0);
+	SIGNAL BALL_X : STD_LOGIC_VECTOR(9 downto 0);
+	SIGNAL BALL_Y : STD_LOGIC_VECTOR(8 downto 0);
+	SIGNAL PLATFORM_X : STD_LOGIC_VECTOR(9 downto 0);
    SIGNAL VGA_R	:	STD_LOGIC;
    SIGNAL VGA_G	:	STD_LOGIC;
    SIGNAL VGA_B	:	STD_LOGIC;
    SIGNAL VGA_HS	:	STD_LOGIC;
    SIGNAL VGA_VS	:	STD_LOGIC;
+	
+	
+  constant ball_x_int : positive := 250;
+  constant ball_y_int : positive := 200;
+  constant platform_x_int : positive := 400;
+  constant tiles : std_logic_vector(53 downto 0) := "100110111110111101110010101101011101110111111011011111";
 
   constant SIM_FRAMES : positive := 1;           -- frames simulated
   constant BMP_FRAMES : natural  := 1;           -- frames written to BMP files
@@ -173,6 +187,10 @@ BEGIN
 
   UUT: breakout PORT MAP(
        CLK_50MHz => CLK_50MHZ,
+		 ENABLED_TILES => ENABLED_TILES,
+		 BALL_X => BALL_X,
+		 BALL_Y => BALL_Y,
+		 PLATFORM_X => PLATFORM_X,
        VGA_R     => VGA_R,
        VGA_G     => VGA_G,
        VGA_B     => VGA_B,
@@ -251,6 +269,11 @@ tb_bmp : process
   variable file_nr : string(FILE_NR_LEN downto 1);
 
   begin
+	 BALL_X <= std_logic_vector(to_unsigned(ball_x_int, 10));
+	 BALL_Y <= std_logic_vector(to_unsigned(ball_y_int, 9));
+	 PLATFORM_X <= std_logic_vector(to_unsigned(platform_x_int, 10));
+	 ENABLED_TILES <= tiles;
+  
     wait for CLK_50MHZ_PERIOD;
 
     bmp_ptr := new t_bmp;

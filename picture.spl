@@ -1,6 +1,10 @@
 [Inputs]
 =PIX_X[9:0]=
 =PIX_Y[8:0]=
+=ENABLED_TILES[53:0]=
+=BALL_X[9:0]=
+=BALL_Y[8:0]=
+=PLATFORM_X[9:0]=
 [Outputs]
 =RGB[2:0]=
 [BiDir]

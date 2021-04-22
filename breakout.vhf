@@ -7,7 +7,7 @@
 -- \   \   \/     Version : 14.7
 --  \   \         Application : sch2hdl
 --  /   /         Filename : breakout.vhf
--- /___/   /\     Timestamp : 04/07/2021 22:39:54
+-- /___/   /\     Timestamp : 04/23/2021 01:05:08
 -- \   \  /  \ 
 --  \___\/\___\ 
 --
@@ -26,18 +26,22 @@ library UNISIM;
 use UNISIM.Vcomponents.ALL;
 
 entity breakout is
-   port ( CLK_50MHz : in    std_logic; 
-          VGA_B     : out   std_logic; 
-          VGA_G     : out   std_logic; 
-          VGA_HS    : out   std_logic; 
-          VGA_R     : out   std_logic; 
-          VGA_VS    : out   std_logic);
+   port ( BALL_X        : in    std_logic_vector (9 downto 0); 
+          BALL_Y        : in    std_logic_vector (8 downto 0); 
+          CLK_50MHz     : in    std_logic; 
+          ENABLED_TILES : in    std_logic_vector (53 downto 0); 
+          PLATFORM_X    : in    std_logic_vector (9 downto 0); 
+          VGA_B         : out   std_logic; 
+          VGA_G         : out   std_logic; 
+          VGA_HS        : out   std_logic; 
+          VGA_R         : out   std_logic; 
+          VGA_VS        : out   std_logic);
 end breakout;
 
 architecture BEHAVIORAL of breakout is
-   signal XLXN_2    : std_logic_vector (2 downto 0);
-   signal XLXN_4    : std_logic_vector (9 downto 0);
-   signal XLXN_5    : std_logic_vector (8 downto 0);
+   signal XLXN_2        : std_logic_vector (2 downto 0);
+   signal XLXN_4        : std_logic_vector (9 downto 0);
+   signal XLXN_5        : std_logic_vector (8 downto 0);
    component driver
       port ( CLK_50MHz : in    std_logic; 
              RGB       : in    std_logic_vector (2 downto 0); 
@@ -51,9 +55,13 @@ architecture BEHAVIORAL of breakout is
    end component;
    
    component picture
-      port ( PIX_X : in    std_logic_vector (9 downto 0); 
-             PIX_Y : in    std_logic_vector (8 downto 0); 
-             RGB   : out   std_logic_vector (2 downto 0));
+      port ( PIX_X         : in    std_logic_vector (9 downto 0); 
+             PIX_Y         : in    std_logic_vector (8 downto 0); 
+             RGB           : out   std_logic_vector (2 downto 0); 
+             ENABLED_TILES : in    std_logic_vector (53 downto 0); 
+             BALL_X        : in    std_logic_vector (9 downto 0); 
+             BALL_Y        : in    std_logic_vector (8 downto 0); 
+             PLATFORM_X    : in    std_logic_vector (9 downto 0));
    end component;
    
 begin
@@ -69,8 +77,12 @@ begin
                 VGA_VS=>VGA_VS);
    
    XLXI_2 : picture
-      port map (PIX_X(9 downto 0)=>XLXN_4(9 downto 0),
+      port map (BALL_X(9 downto 0)=>BALL_X(9 downto 0),
+                BALL_Y(8 downto 0)=>BALL_Y(8 downto 0),
+                ENABLED_TILES(53 downto 0)=>ENABLED_TILES(53 downto 0),
+                PIX_X(9 downto 0)=>XLXN_4(9 downto 0),
                 PIX_Y(8 downto 0)=>XLXN_5(8 downto 0),
+                PLATFORM_X(9 downto 0)=>PLATFORM_X(9 downto 0),
                 RGB(2 downto 0)=>XLXN_2(2 downto 0));
    
 end BEHAVIORAL;

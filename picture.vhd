@@ -31,7 +31,9 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity picture is
 	 Generic ( PIX_X_BITS : positive := 10;
-				  PIX_Y_BITS : positive := 9 );
+				  PIX_Y_BITS : positive := 9;
+				  TILE_ROWS : positive := 6;
+				  TILES_IN_ROW : positive := 9 );
     Port ( PIX_X : in  STD_LOGIC_VECTOR (PIX_X_BITS - 1 downto 0);
            PIX_Y : in  STD_LOGIC_VECTOR (PIX_Y_BITS - 1 downto 0);
            RGB : out  STD_LOGIC_VECTOR (2 downto 0));
@@ -39,6 +41,10 @@ end picture;
 
 architecture Behavioral of picture is
 	subtype t_color is std_logic_vector(2 downto 0);
+	subtype x_coord is integer range 0 to (PIX_X_BITS ** 2) - 1;
+	subtype y_coord is integer range 0 to (PIX_Y_BITS ** 2) - 1;
+	subtype tiles_status is std_logic_vector((TILE_ROWS * TILES_IN_ROW) - 1 downto 0); 
+	
 	constant WHITE : t_color := "111";
 	constant BLACK : t_color := "000";
 	constant RED : t_color := "100";
@@ -48,68 +54,46 @@ architecture Behavioral of picture is
 	constant CYAN : t_color := "011";
 	constant MAGENTA : t_color := "101";
 	
-	signal x_int : integer range 0 to (PIX_X_BITS ** 2) - 1;
-	signal y_int : integer range 0 to (PIX_Y_BITS ** 2) - 1;
+	constant FIRST_ROW_Y_OFFSET : integer := 40;
+	constant TILE_HEIGHT : integer := 20;
+	constant TILE_WIDTH : integer := 71;
+	
+	constant ENABLED_TILES : tiles_status := "100110111110111101110010101101011101110111101011011101";
+	
+	signal x_int : x_coord;
+	signal y_int : y_coord;
+	
+	function tiles_row( row_number : integer range 0 to 10;
+							  x_int : x_coord;
+							  y_int : y_coord;
+							  enabled_tiles : tiles_status ) return boolean is
+		variable y_offset : integer range 0 to 140;
+		variable ret_bool : boolean;
+	begin
+		y_offset := row_number * TILE_HEIGHT + FIRST_ROW_Y_OFFSET;
+		ret_bool := false;
+		for i in 0 to TILES_IN_ROW - 1 loop
+			ret_bool := ret_bool or 
+				( x_int > i*TILE_WIDTH and 
+				  x_int < (i*TILE_WIDTH + TILE_WIDTH) and
+				  y_int > y_offset and 
+				  y_int < (y_offset + TILE_HEIGHT) and 
+				  enabled_tiles(TILES_IN_ROW * row_number + i) = '1' );
+		end loop;
+		
+		return ret_bool;
+	end tiles_row;
 	
 begin
 	x_int <= to_integer(unsigned(PIX_X));
 	y_int <= to_integer(unsigned(PIX_Y));
 
-	RGB <=  RED when x_int > 0   and x_int < 71  and y_int >= 41 and y_int < 60 else
-		    RED when x_int > 71  and x_int < 142 and y_int >= 41 and y_int < 60 else
-		    RED when x_int > 142 and x_int < 213 and y_int >= 41 and y_int < 60 else
-		    RED when x_int > 213 and x_int < 284 and y_int >= 41 and y_int < 60 else
-		    RED when x_int > 284 and x_int < 355 and y_int >= 41 and y_int < 60 else
-		    RED when x_int > 355 and x_int < 426 and y_int >= 41 and y_int < 60 else
-		    RED when x_int > 426 and x_int < 497 and y_int >= 41 and y_int < 60 else
-		    RED when x_int > 497 and x_int < 568 and y_int >= 41 and y_int < 60 else
-			RED when x_int > 568 and x_int < 639 and y_int >= 41 and y_int < 60 else
-			YELLOW when x_int > 0   and x_int < 71  and y_int >= 61 and y_int < 80 else
-		    YELLOW when x_int > 71  and x_int < 142 and y_int >= 61 and y_int < 80 else
-		    YELLOW when x_int > 142 and x_int < 213 and y_int >= 61 and y_int < 80 else
-		    YELLOW when x_int > 213 and x_int < 284 and y_int >= 61 and y_int < 80 else
-		    YELLOW when x_int > 284 and x_int < 355 and y_int >= 61 and y_int < 80 else
-		    YELLOW when x_int > 355 and x_int < 426 and y_int >= 61 and y_int < 80 else
-		    YELLOW when x_int > 426 and x_int < 497 and y_int >= 61 and y_int < 80 else
-		    YELLOW when x_int > 497 and x_int < 568 and y_int >= 61 and y_int < 80 else
-			YELLOW when x_int > 568 and x_int < 639 and y_int >= 61 and y_int < 80 else
-			GREEN when x_int > 0   and x_int < 71  and y_int >= 81 and y_int < 100 else
-		    GREEN when x_int > 71  and x_int < 142 and y_int >= 81 and y_int < 100 else
-		    GREEN when x_int > 142 and x_int < 213 and y_int >= 81 and y_int < 100 else
-		    GREEN when x_int > 213 and x_int < 284 and y_int >= 81 and y_int < 100 else
-		    GREEN when x_int > 284 and x_int < 355 and y_int >= 81 and y_int < 100 else
-		    GREEN when x_int > 355 and x_int < 426 and y_int >= 81 and y_int < 100 else
-		    GREEN when x_int > 426 and x_int < 497 and y_int >= 81 and y_int < 100 else
-		    GREEN when x_int > 497 and x_int < 568 and y_int >= 81 and y_int < 100 else
-			GREEN when x_int > 568 and x_int < 639 and y_int >= 81 and y_int < 100 else
-			CYAN when x_int > 0   and x_int < 71  and y_int >= 101 and y_int < 120 else
-		    CYAN when x_int > 71  and x_int < 142 and y_int >= 101 and y_int < 120 else
-		    CYAN when x_int > 142 and x_int < 213 and y_int >= 101 and y_int < 120 else
-		    CYAN when x_int > 213 and x_int < 284 and y_int >= 101 and y_int < 120 else
-		    CYAN when x_int > 284 and x_int < 355 and y_int >= 101 and y_int < 120 else
-		    CYAN when x_int > 355 and x_int < 426 and y_int >= 101 and y_int < 120 else
-		    CYAN when x_int > 426 and x_int < 497 and y_int >= 101 and y_int < 120 else
-		    CYAN when x_int > 497 and x_int < 568 and y_int >= 101 and y_int < 120 else
-			CYAN when x_int > 568 and x_int < 639 and y_int >= 101 and y_int < 120 else
-			BLUE when x_int > 0   and x_int < 71  and y_int >= 121 and y_int < 140 else
-		    BLUE when x_int > 71  and x_int < 142 and y_int >= 121 and y_int < 140 else
-		    BLUE when x_int > 142 and x_int < 213 and y_int >= 121 and y_int < 140 else
-		    BLUE when x_int > 213 and x_int < 284 and y_int >= 121 and y_int < 140 else
-		    BLUE when x_int > 284 and x_int < 355 and y_int >= 121 and y_int < 140 else
-		    BLUE when x_int > 355 and x_int < 426 and y_int >= 121 and y_int < 140 else
-		    BLUE when x_int > 426 and x_int < 497 and y_int >= 121 and y_int < 140 else
-		    BLUE when x_int > 497 and x_int < 568 and y_int >= 121 and y_int < 140 else
-			BLUE when x_int > 568 and x_int < 639 and y_int >= 121 and y_int < 140 else
-			MAGENTA when x_int > 0   and x_int < 71  and y_int >= 141 and y_int < 160 else
-		    MAGENTA when x_int > 71  and x_int < 142 and y_int >= 141 and y_int < 160 else
-		    MAGENTA when x_int > 142 and x_int < 213 and y_int >= 141 and y_int < 160 else
-		    MAGENTA when x_int > 213 and x_int < 284 and y_int >= 141 and y_int < 160 else
-		    MAGENTA when x_int > 284 and x_int < 355 and y_int >= 141 and y_int < 160 else
-		    MAGENTA when x_int > 355 and x_int < 426 and y_int >= 141 and y_int < 160 else
-		    MAGENTA when x_int > 426 and x_int < 497 and y_int >= 141 and y_int < 160 else
-		    MAGENTA when x_int > 497 and x_int < 568 and y_int >= 141 and y_int < 160 else
-			MAGENTA when x_int > 568 and x_int < 639 and y_int >= 141 and y_int < 160 else
-
-		    BLACK;
+	RGB <=  RED when tiles_row(0, x_int, y_int, ENABLED_TILES) else
+			  YELLOW when tiles_row(1, x_int, y_int, ENABLED_TILES) else
+			  GREEN when tiles_row(2, x_int, y_int, ENABLED_TILES) else
+			  CYAN when tiles_row(3, x_int, y_int, ENABLED_TILES) else
+			  BLUE when tiles_row(4, x_int, y_int, ENABLED_TILES) else
+			  MAGENTA when tiles_row(5, x_int, y_int, ENABLED_TILES) else
+			  BLACK;
 
 end Behavioral;

@@ -35,7 +35,8 @@ entity driver is
 				  PIX_X_BITS : positive := 10;
 				  PIX_Y_BITS : positive := 9 );
 				  
-    Port ( CLK_50MHz : in  STD_LOGIC;
+    Port ( CLK_25MHz : in  STD_LOGIC;
+			  RESET : in STD_LOGIC;
            RGB : in  STD_LOGIC_VECTOR (2 downto 0);
            VGA_R : out  STD_LOGIC;
            VGA_G : out  STD_LOGIC;
@@ -47,8 +48,6 @@ entity driver is
 end driver;
 
 architecture Behavioral of driver is
-	signal clk_25 : STD_LOGIC;
-	
 	signal h_cnt : integer range 0 to H_CYCL;
 	signal v_cnt : integer range 0 to V_CYCL;
 	
@@ -62,19 +61,11 @@ architecture Behavioral of driver is
 	constant PIX_Y_MIN : positive := V_LEN + V_TBP;
 	constant PIX_Y_MAX : positive := PIX_Y_MIN + 480 - 1;
 begin
-
-clk_div: process (CLK_50MHz) begin
-	if rising_edge(CLK_50MHz) then
-		if clk_25 = '1' then
-			clk_25 <= '0';
-		else
-			clk_25 <= '1';
-		end if;
-	end if;
-end process;
-
-counters: process (clk_25) begin
-	if rising_edge(clk_25) then
+counters: process (CLK_25MHz, RESET) begin
+	if RESET = '1' then
+			h_cnt <= 0;
+			v_cnt <= 0;
+	elsif rising_edge(CLK_25MHz) then
 		if h_cnt < H_CYCL - 1 then
 			h_cnt <= h_cnt + 1;
 		else

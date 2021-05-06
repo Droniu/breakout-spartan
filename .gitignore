@@ -180,3 +180,4 @@ _xmsgs/
 
 # End of https://www.toptal.com/developers/gitignore/api/xilinx,xilinxise
 *.exe
+*.bmp

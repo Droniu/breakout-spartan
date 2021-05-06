@@ -1,5 +1,6 @@
 [Inputs]
-CLK_50MHz
+CLK_25MHz
+RESET
 =RGB[2:0]=
 [Outputs]
 VGA_R

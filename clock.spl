@@ -1,0 +1,5 @@
+[Inputs]
+CLK_50MHz
+[Outputs]
+CLK_25MHz
+[BiDir]

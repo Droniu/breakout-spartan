@@ -1,0 +1,9 @@
+[Inputs]
+CLK_25MHz
+RESET
+[Outputs]
+=ENABLED_TILES[53:0]=
+=BALL_X[9:0]=
+=BALL_Y[8:0]=
+=PLATFORM_X[9:0]=
+[BiDir]

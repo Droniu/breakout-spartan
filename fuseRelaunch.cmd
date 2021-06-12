@@ -1,1 +1,1 @@
--intstyle "ise" -incremental -o "C:/Users/szyminson/Documents/xilinx/breakout-spartan/breakout_breakout_sch_tb_isim_beh.exe" -prj "C:/Users/szyminson/Documents/xilinx/breakout-spartan/breakout_breakout_sch_tb_beh.prj" "work.breakout_breakout_sch_tb" 
+-intstyle "ise" -incremental -o "C:/szyminson/polibuda/ucisw2/breakout-spartan/breakout_breakout_sch_tb_2_isim_beh.exe" -prj "C:/szyminson/polibuda/ucisw2/breakout-spartan/breakout_breakout_sch_tb_2_beh.prj" "work.breakout_breakout_sch_tb_2" 

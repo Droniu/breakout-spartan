@@ -7,13 +7,13 @@
 -- \   \   \/     Version : 14.7
 --  \   \         Application : sch2hdl
 --  /   /         Filename : breakout.vhf
--- /___/   /\     Timestamp : 05/06/2021 21:59:39
+-- /___/   /\     Timestamp : 06/12/2021 12:04:33
 -- \   \  /  \ 
 --  \___\/\___\ 
 --
---Command: sch2hdl -intstyle ise -family spartan3e -flat -suppress -vhdl C:/Users/szyminson/Documents/xilinx/breakout-spartan/breakout.vhf -w C:/Users/szyminson/Documents/xilinx/breakout-spartan/breakout.sch
+--Command: sch2hdl -intstyle ise -family spartan3a -flat -suppress -vhdl C:/szyminson/polibuda/ucisw2/breakout-spartan/breakout.vhf -w C:/szyminson/polibuda/ucisw2/breakout-spartan/breakout.sch
 --Design Name: breakout
---Device: spartan3e
+--Device: spartan3a
 --Purpose:
 --    This vhdl netlist is translated from an ECS schematic. It can be 
 --    synthesized and simulated, but it should not be modified. 
@@ -26,24 +26,32 @@ library UNISIM;
 use UNISIM.Vcomponents.ALL;
 
 entity breakout is
-   port ( CLK_50MHz : in    std_logic; 
-          RESET     : in    std_logic; 
-          VGA_B     : out   std_logic; 
-          VGA_G     : out   std_logic; 
-          VGA_HS    : out   std_logic; 
-          VGA_R     : out   std_logic; 
-          VGA_VS    : out   std_logic);
+   port ( CLK_12MHz     : in    std_logic; 
+          ENCODER_LEFT  : in    std_logic; 
+          ENCODER_RIGHT : in    std_logic; 
+          RESET         : in    std_logic; 
+          VGA_B         : out   std_logic_vector (2 downto 1); 
+          VGA_G         : out   std_logic_vector (2 downto 0); 
+          VGA_HS        : out   std_logic; 
+          VGA_R         : out   std_logic_vector (2 downto 0); 
+          VGA_VS        : out   std_logic);
 end breakout;
 
 architecture BEHAVIORAL of breakout is
-   signal XLXN_2    : std_logic_vector (2 downto 0);
-   signal XLXN_4    : std_logic_vector (9 downto 0);
-   signal XLXN_5    : std_logic_vector (8 downto 0);
-   signal XLXN_12   : std_logic_vector (53 downto 0);
-   signal XLXN_13   : std_logic_vector (9 downto 0);
-   signal XLXN_14   : std_logic_vector (8 downto 0);
-   signal XLXN_15   : std_logic_vector (9 downto 0);
-   signal XLXN_28   : std_logic;
+   attribute BOX_TYPE   : string ;
+   signal XLXN_2        : std_logic_vector (2 downto 0);
+   signal XLXN_4        : std_logic_vector (9 downto 0);
+   signal XLXN_5        : std_logic_vector (8 downto 0);
+   signal XLXN_12       : std_logic_vector (53 downto 0);
+   signal XLXN_13       : std_logic_vector (9 downto 0);
+   signal XLXN_14       : std_logic_vector (8 downto 0);
+   signal XLXN_15       : std_logic_vector (9 downto 0);
+   signal XLXN_28       : std_logic;
+   signal XLXN_36       : std_logic;
+   signal XLXN_37       : std_logic;
+   signal XLXN_38       : std_logic;
+   signal XLXN_47       : std_logic;
+   signal XLXN_49       : std_logic;
    component driver
       port ( CLK_25MHz : in    std_logic; 
              RGB       : in    std_logic_vector (2 downto 0); 
@@ -70,6 +78,8 @@ architecture BEHAVIORAL of breakout is
    component logic
       port ( CLK_25MHz     : in    std_logic; 
              RESET         : in    std_logic; 
+             ENCODER_LEFT  : in    std_logic; 
+             ENCODER_RIGHT : in    std_logic; 
              ENABLED_TILES : out   std_logic_vector (53 downto 0); 
              BALL_X        : out   std_logic_vector (9 downto 0); 
              BALL_Y        : out   std_logic_vector (8 downto 0); 
@@ -81,17 +91,41 @@ architecture BEHAVIORAL of breakout is
              CLK_25MHz : out   std_logic);
    end component;
    
+   component pll
+      port ( RST_IN          : in    std_logic; 
+             CLKIN_IN        : in    std_logic; 
+             LOCKED_OUT      : out   std_logic; 
+             CLKFX_OUT       : out   std_logic; 
+             CLKIN_IBUFG_OUT : out   std_logic; 
+             CLK0_OUT        : out   std_logic);
+   end component;
+   
+   component color_converter
+      port ( VGA_R_IN  : in    std_logic; 
+             VGA_G_IN  : in    std_logic; 
+             VGA_B_IN  : in    std_logic; 
+             VGA_R_OUT : out   std_logic_vector (2 downto 0); 
+             VGA_G_OUT : out   std_logic_vector (2 downto 0); 
+             VGA_B_OUT : out   std_logic_vector (2 downto 1));
+   end component;
+   
+   component INV
+      port ( I : in    std_logic; 
+             O : out   std_logic);
+   end component;
+   attribute BOX_TYPE of INV : component is "BLACK_BOX";
+   
 begin
    XLXI_1 : driver
       port map (CLK_25MHz=>XLXN_28,
-                RESET=>RESET,
+                RESET=>XLXN_49,
                 RGB(2 downto 0)=>XLXN_2(2 downto 0),
                 PIX_X(9 downto 0)=>XLXN_4(9 downto 0),
                 PIX_Y(8 downto 0)=>XLXN_5(8 downto 0),
-                VGA_B=>VGA_B,
-                VGA_G=>VGA_G,
+                VGA_B=>XLXN_38,
+                VGA_G=>XLXN_37,
                 VGA_HS=>VGA_HS,
-                VGA_R=>VGA_R,
+                VGA_R=>XLXN_36,
                 VGA_VS=>VGA_VS);
    
    XLXI_2 : picture
@@ -105,15 +139,37 @@ begin
    
    XLXI_3 : logic
       port map (CLK_25MHz=>XLXN_28,
-                RESET=>RESET,
+                ENCODER_LEFT=>ENCODER_LEFT,
+                ENCODER_RIGHT=>ENCODER_RIGHT,
+                RESET=>XLXN_49,
                 BALL_X(9 downto 0)=>XLXN_13(9 downto 0),
                 BALL_Y(8 downto 0)=>XLXN_14(8 downto 0),
                 ENABLED_TILES(53 downto 0)=>XLXN_12(53 downto 0),
                 PLATFORM_X(9 downto 0)=>XLXN_15(9 downto 0));
    
    XLXI_4 : clock
-      port map (CLK_50MHz=>CLK_50MHz,
+      port map (CLK_50MHz=>XLXN_47,
                 CLK_25MHz=>XLXN_28);
+   
+   XLXI_5 : pll
+      port map (CLKIN_IN=>CLK_12MHz,
+                RST_IN=>XLXN_49,
+                CLKFX_OUT=>XLXN_47,
+                CLKIN_IBUFG_OUT=>open,
+                CLK0_OUT=>open,
+                LOCKED_OUT=>open);
+   
+   XLXI_6 : color_converter
+      port map (VGA_B_IN=>XLXN_38,
+                VGA_G_IN=>XLXN_37,
+                VGA_R_IN=>XLXN_36,
+                VGA_B_OUT(2 downto 1)=>VGA_B(2 downto 1),
+                VGA_G_OUT(2 downto 0)=>VGA_G(2 downto 0),
+                VGA_R_OUT(2 downto 0)=>VGA_R(2 downto 0));
+   
+   XLXI_7 : INV
+      port map (I=>RESET,
+                O=>XLXN_49);
    
 end BEHAVIORAL;
 

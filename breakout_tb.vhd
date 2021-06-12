@@ -37,8 +37,8 @@ ARCHITECTURE behavioral OF breakout_breakout_sch_tb IS
   --constant tiles : std_logic_vector(53 downto 0) := "100110111110111101110010101101011101110111111011011111";
   --constant tiles : std_logic_vector(53 downto 0) := "111111111111111111111111111111111111111111111111111111";
 
-  constant SIM_FRAMES : positive := 5;           -- frames simulated
-  constant BMP_FRAMES : natural  := 5;           -- frames written to BMP files
+  constant SIM_FRAMES : positive := 15;           -- frames simulated
+  constant BMP_FRAMES : natural  := 15;           -- frames written to BMP files
 
   constant BMP_FILE   : string := "frame";       -- BMP file name (without extension)
 

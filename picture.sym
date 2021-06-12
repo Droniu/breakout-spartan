@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="picture">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2021-5-6T19:42:54</timestamp>
+    <timestamp>2021-5-20T21:31:56</timestamp>
     <pin polarity="Input" x="0" y="-96" name="PIX_X(9:0)" />
     <pin polarity="Input" x="0" y="-32" name="PIX_Y(8:0)" />
     <pin polarity="Input" x="0" y="32" name="ENABLED_TILES(53:0)" />

@@ -66,11 +66,6 @@ architecture Behavioral of picture is
 	constant PLATFORM_WIDTH : positive := 100;
 	constant PLATFORM_Y : positive := 440;
 	
-	--constant ENABLED_TILES : tiles_status := "100110111110111101110010101101011101110111101011011101";
-	--constant ball_x : x_coord := 200;
-	--constant ball_y : y_coord := 200;
-	--constant platform_x : x_coord := 350;
-	
 	signal x_int : x_coord;
 	signal y_int : y_coord;
 	signal ball_x_int : x_coord;

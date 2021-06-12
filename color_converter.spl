@@ -1,0 +1,9 @@
+[Inputs]
+VGA_R_IN
+VGA_G_IN
+VGA_B_IN
+[Outputs]
+=VGA_R_OUT[2:0]=
+=VGA_G_OUT[2:0]=
+=VGA_B_OUT[2:1]=
+[BiDir]

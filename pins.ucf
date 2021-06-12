@@ -111,9 +111,9 @@ CONFIG VCCAUX = "3.3" ;
 #    NET "IO_P1[1]"           LOC = P32   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
 #    NET "IO_P1[2]"           LOC = P28   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
 #    NET "IO_P1[3]"           LOC = P30   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
-#    NET "IO_P1[4]"           LOC = P27   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
+#   NET "ENCODER_LEFT"           LOC = P27   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
 #    NET "IO_P1[5]"           LOC = P29   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
-#    NET "IO_P1[6]"           LOC = P24   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
+#   NET "ENCODER_RIGHT"           LOC = P24   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12 | CLOCK_DEDICATED_ROUTE = FALSE;
 #    NET "IO_P1[7]"           LOC = P25   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
 #
 ####################################################################################################

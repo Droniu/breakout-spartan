@@ -25,8 +25,10 @@
         <signal name="VGA_B(2:1)" />
         <signal name="CLK_12MHz" />
         <signal name="XLXN_49" />
-        <signal name="ENCODER_LEFT" />
-        <signal name="ENCODER_RIGHT" />
+        <signal name="XLXN_55" />
+        <signal name="XLXN_56" />
+        <signal name="PL_LEFT" />
+        <signal name="PL_RIGHT" />
         <port polarity="Output" name="VGA_HS" />
         <port polarity="Output" name="VGA_VS" />
         <port polarity="Input" name="RESET" />
@@ -34,8 +36,8 @@
         <port polarity="Output" name="VGA_G(2:0)" />
         <port polarity="Output" name="VGA_B(2:1)" />
         <port polarity="Input" name="CLK_12MHz" />
-        <port polarity="Input" name="ENCODER_LEFT" />
-        <port polarity="Input" name="ENCODER_RIGHT" />
+        <port polarity="Input" name="PL_LEFT" />
+        <port polarity="Input" name="PL_RIGHT" />
         <blockdef name="driver">
             <timestamp>2021-5-6T19:42:37</timestamp>
             <line x2="0" y1="96" y2="96" x1="64" />
@@ -72,9 +74,9 @@
             <rect width="256" x="64" y="-128" height="384" />
         </blockdef>
         <blockdef name="logic">
-            <timestamp>2021-6-11T15:58:36</timestamp>
-            <line x2="0" y1="160" y2="160" x1="64" />
-            <line x2="0" y1="224" y2="224" x1="64" />
+            <timestamp>2021-6-17T20:48:48</timestamp>
+            <line x2="0" y1="288" y2="288" x1="64" />
+            <line x2="0" y1="352" y2="352" x1="64" />
             <line x2="0" y1="32" y2="32" x1="64" />
             <line x2="0" y1="96" y2="96" x1="64" />
             <rect width="64" x="512" y="-236" height="24" />
@@ -85,7 +87,7 @@
             <line x2="576" y1="-96" y2="-96" x1="512" />
             <rect width="64" x="512" y="-44" height="24" />
             <line x2="576" y1="-32" y2="-32" x1="512" />
-            <rect width="448" x="64" y="-256" height="512" />
+            <rect width="448" x="64" y="-256" height="640" />
         </blockdef>
         <blockdef name="color_converter">
             <timestamp>2021-6-11T14:14:23</timestamp>
@@ -143,8 +145,8 @@
         <block symbolname="logic" name="XLXI_3">
             <blockpin signalname="XLXN_28" name="CLK_25MHz" />
             <blockpin signalname="XLXN_49" name="RESET" />
-            <blockpin signalname="ENCODER_LEFT" name="ENCODER_LEFT" />
-            <blockpin signalname="ENCODER_RIGHT" name="ENCODER_RIGHT" />
+            <blockpin signalname="XLXN_55" name="PL_LEFT" />
+            <blockpin signalname="XLXN_56" name="PL_RIGHT" />
             <blockpin signalname="XLXN_12(53:0)" name="ENABLED_TILES(53:0)" />
             <blockpin signalname="XLXN_13(9:0)" name="BALL_X(9:0)" />
             <blockpin signalname="XLXN_14(8:0)" name="BALL_Y(8:0)" />
@@ -169,6 +171,14 @@
             <blockpin signalname="XLXN_28" name="CLKFX_OUT" />
             <blockpin name="CLKIN_IBUFG_OUT" />
             <blockpin name="CLK0_OUT" />
+        </block>
+        <block symbolname="inv" name="XLXI_9">
+            <blockpin signalname="PL_LEFT" name="I" />
+            <blockpin signalname="XLXN_55" name="O" />
+        </block>
+        <block symbolname="inv" name="XLXI_10">
+            <blockpin signalname="PL_RIGHT" name="I" />
+            <blockpin signalname="XLXN_56" name="O" />
         </block>
     </netlist>
     <sheet sheetnum="1" width="3520" height="2720">
@@ -245,10 +255,22 @@
         </branch>
         <iomarker fontsize="28" x="208" y="640" name="CLK_12MHz" orien="R180" />
         <branch name="RESET">
-            <wire x2="160" y1="1248" y2="1248" x1="144" />
-            <wire x2="176" y1="1248" y2="1248" x1="160" />
+            <wire x2="176" y1="1248" y2="1248" x1="144" />
         </branch>
         <instance x="176" y="1280" name="XLXI_7" orien="R0" />
+        <instance x="304" y="672" name="XLXI_8" orien="R0">
+        </instance>
+        <branch name="XLXN_28">
+            <wire x2="432" y1="832" y2="1184" x1="432" />
+            <wire x2="496" y1="1184" y2="1184" x1="432" />
+            <wire x2="1216" y1="832" y2="832" x1="432" />
+            <wire x2="1216" y1="512" y2="512" x1="768" />
+            <wire x2="1216" y1="512" y2="832" x1="1216" />
+            <wire x2="1968" y1="512" y2="512" x1="1216" />
+            <wire x2="1968" y1="512" y2="832" x1="1968" />
+            <wire x2="1984" y1="832" y2="832" x1="1968" />
+        </branch>
+        <iomarker fontsize="28" x="144" y="1248" name="RESET" orien="R180" />
         <branch name="XLXN_49">
             <wire x2="304" y1="448" y2="448" x1="224" />
             <wire x2="224" y1="448" y2="736" x1="224" />
@@ -258,34 +280,27 @@
             <wire x2="448" y1="1232" y2="1232" x1="400" />
             <wire x2="448" y1="1232" y2="1248" x1="448" />
             <wire x2="496" y1="1248" y2="1248" x1="448" />
-            <wire x2="448" y1="1248" y2="1488" x1="448" />
-            <wire x2="1792" y1="1488" y2="1488" x1="448" />
+            <wire x2="448" y1="1248" y2="1600" x1="448" />
+            <wire x2="1792" y1="1600" y2="1600" x1="448" />
             <wire x2="1984" y1="896" y2="896" x1="1792" />
-            <wire x2="1792" y1="896" y2="1488" x1="1792" />
+            <wire x2="1792" y1="896" y2="1600" x1="1792" />
         </branch>
-        <branch name="ENCODER_LEFT">
-            <wire x2="480" y1="1312" y2="1312" x1="288" />
-            <wire x2="496" y1="1312" y2="1312" x1="480" />
+        <instance x="240" y="1472" name="XLXI_9" orien="R0" />
+        <instance x="240" y="1536" name="XLXI_10" orien="R0" />
+        <branch name="XLXN_55">
+            <wire x2="496" y1="1440" y2="1440" x1="464" />
         </branch>
-        <branch name="ENCODER_RIGHT">
-            <wire x2="480" y1="1376" y2="1376" x1="304" />
-            <wire x2="496" y1="1376" y2="1376" x1="480" />
+        <branch name="XLXN_56">
+            <wire x2="496" y1="1504" y2="1504" x1="464" />
         </branch>
-        <instance x="304" y="672" name="XLXI_8" orien="R0">
-        </instance>
-        <branch name="XLXN_28">
-            <wire x2="432" y1="832" y2="1184" x1="432" />
-            <wire x2="496" y1="1184" y2="1184" x1="432" />
-            <wire x2="1216" y1="832" y2="832" x1="432" />
-            <wire x2="1216" y1="512" y2="512" x1="768" />
-            <wire x2="1216" y1="512" y2="832" x1="1216" />
-            <wire x2="1232" y1="512" y2="512" x1="1216" />
-            <wire x2="1968" y1="512" y2="512" x1="1232" />
-            <wire x2="1968" y1="512" y2="832" x1="1968" />
-            <wire x2="1984" y1="832" y2="832" x1="1968" />
+        <iomarker fontsize="28" x="176" y="1440" name="PL_LEFT" orien="R180" />
+        <iomarker fontsize="28" x="192" y="1504" name="PL_RIGHT" orien="R180" />
+        <branch name="PL_LEFT">
+            <wire x2="224" y1="1440" y2="1440" x1="176" />
+            <wire x2="240" y1="1440" y2="1440" x1="224" />
         </branch>
-        <iomarker fontsize="28" x="304" y="1376" name="ENCODER_RIGHT" orien="R180" />
-        <iomarker fontsize="28" x="288" y="1312" name="ENCODER_LEFT" orien="R180" />
-        <iomarker fontsize="28" x="144" y="1248" name="RESET" orien="R180" />
+        <branch name="PL_RIGHT">
+            <wire x2="240" y1="1504" y2="1504" x1="192" />
+        </branch>
     </sheet>
 </drawing>

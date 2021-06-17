@@ -1,8 +1,1 @@
-select figure at 212 1317 8 -branches -sn=1
-move iomarker at 288 1312 to 304 1456 R180 -keepConn -sn=1
-select figure at 204 1357 8 -branches -sn=1
-move iomarker at 304 1376 to 320 1520 R180 -keepConn -sn=1
-select figure at 175 1445 8 -branches -sn=1
-name net at 304 1456 8 PL_LEFT -sn=1
-select figure at 219 1507 8 -branches -sn=1
-name net at 320 1520 8 PL_RIGHT -sn=1
+select figure at -690 1970 8 -branches -sn=1

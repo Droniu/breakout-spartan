@@ -65,9 +65,9 @@ architecture Behavioral of logic is
 	constant PLATFORM_Y : positive := 440;
 	constant PLATFORM_PIX_PER_TICK : positive := 2;
 	
-	constant INIT_BALL_X : positive := 150;
-	constant INIT_BALL_Y : positive := 367;
-	constant INIT_PLATFORM_X : positive := 100;
+	constant INIT_BALL_X : positive := 180;
+	constant INIT_BALL_Y : positive := 300;
+	constant INIT_PLATFORM_X : positive := 320;
 	constant INIT_H_SPEED : speed := 4;
 	constant INIT_V_SPEED : speed := 5;
 	constant INIT_ENABLED_TILES : tiles_status :="111111111111111111111111111111111111111111111111111111"; --"100110111110111101110010101101011101110111101011011101";
@@ -106,8 +106,7 @@ architecture Behavioral of logic is
 	
 	function ceiling_collision ( ball_y : y_coord) return boolean is
 	begin
-		return ball_y + BALL_RADIUS > 480 or
-					ball_y - BALL_RADIUS < 0;
+		return ball_y - BALL_RADIUS < 0;
 	end ceiling_collision;
 	
 	function tile_collision( ball_x : x_coord;
@@ -231,7 +230,11 @@ architecture Behavioral of logic is
                 elsif (rising_edge(ball_clk)) then
 								tiles_collision_result := tiles_collision(ball_x_int + h_speed, ball_y_int + v_speed, enabled_tiles_mem);
 								
-								if platform_collision(ball_x_int + h_speed, ball_y_int + v_speed, platform_x_int)
+								if ball_y_int + v_speed + BALL_RADIUS > 480 then
+									v_speed <= 0;
+									h_speed <= 0;
+								
+								elsif platform_collision(ball_x_int + h_speed, ball_y_int + v_speed, platform_x_int)
 									 then
 									--if ball_x_int + h_speed > platform_x_int + 20 then
 										--ball_x_int <= ball_x_int + h_speed + 1;
@@ -252,31 +255,23 @@ architecture Behavioral of logic is
 									
 									
 									
-								elsif tiles_collision_result = 2 then
-									enabled_tiles_mem(get_colliding_tile(ball_x_int + h_speed, ball_y_int + v_speed, enabled_tiles_mem)) <= '0'; 
+								elsif tiles_collision_result = 2 or ceiling_collision(ball_y_int + v_speed) then
+									if tiles_collision_result = 2 then
+										enabled_tiles_mem(get_colliding_tile(ball_x_int + h_speed, ball_y_int + v_speed, enabled_tiles_mem)) <= '0';
+									end if;
 									ball_x_int <= ball_x_int + h_speed;
 									ball_y_int <= ball_y_int - v_speed;
 									v_speed <= -v_speed;
 									
 								
-								elsif tiles_collision_result = 1 then
-									
-									enabled_tiles_mem(get_colliding_tile(ball_x_int + h_speed, ball_y_int + v_speed, enabled_tiles_mem)) <= '0';
+								elsif tiles_collision_result = 1 or wall_collision(ball_x_int + h_speed) then
+									if tiles_collision_result = 1 then
+										enabled_tiles_mem(get_colliding_tile(ball_x_int + h_speed, ball_y_int + v_speed, enabled_tiles_mem)) <= '0';
+									end if;
 									ball_x_int <= ball_x_int - h_speed;
 									ball_y_int <= ball_y_int + v_speed;
 									h_speed <= -h_speed;
 								
-								elsif wall_collision(ball_x_int + h_speed)then
-									ball_x_int <= ball_x_int - h_speed;
-									ball_y_int <= ball_y_int + v_speed;
-									h_speed <= -h_speed;
-								
-								elsif ceiling_collision(ball_y_int + v_speed)
-									 then
-									ball_x_int <= ball_x_int + h_speed;
-									ball_y_int <= ball_y_int - v_speed;
-									v_speed <= -v_speed;
-									
 								else
 									ball_x_int <= ball_x_int + h_speed;
 									ball_y_int <= ball_y_int + v_speed;

@@ -24,14 +24,7 @@
         <signal name="VGA_G(2:0)" />
         <signal name="VGA_B(2:1)" />
         <signal name="CLK_12MHz" />
-        <signal name="XLXN_47" />
         <signal name="XLXN_49" />
-        <signal name="XLXN_52" />
-        <signal name="XLXN_53" />
-        <signal name="XLXN_54" />
-        <signal name="XLXN_55" />
-        <signal name="XLXN_56" />
-        <signal name="XLXN_57" />
         <signal name="ENCODER_LEFT" />
         <signal name="ENCODER_RIGHT" />
         <port polarity="Output" name="VGA_HS" />
@@ -94,22 +87,6 @@
             <line x2="576" y1="-32" y2="-32" x1="512" />
             <rect width="448" x="64" y="-256" height="512" />
         </blockdef>
-        <blockdef name="clock">
-            <timestamp>2021-5-6T9:11:36</timestamp>
-            <rect width="256" x="64" y="-64" height="64" />
-            <line x2="0" y1="-32" y2="-32" x1="64" />
-            <line x2="384" y1="-32" y2="-32" x1="320" />
-        </blockdef>
-        <blockdef name="pll">
-            <timestamp>2021-6-11T13:43:11</timestamp>
-            <rect width="336" x="64" y="-256" height="256" />
-            <line x2="0" y1="-224" y2="-224" x1="64" />
-            <line x2="0" y1="-32" y2="-32" x1="64" />
-            <line x2="464" y1="-224" y2="-224" x1="400" />
-            <line x2="464" y1="-160" y2="-160" x1="400" />
-            <line x2="464" y1="-96" y2="-96" x1="400" />
-            <line x2="464" y1="-32" y2="-32" x1="400" />
-        </blockdef>
         <blockdef name="color_converter">
             <timestamp>2021-6-11T14:14:23</timestamp>
             <rect width="320" x="64" y="-192" height="192" />
@@ -131,6 +108,16 @@
             <line x2="64" y1="-32" y2="0" x1="128" />
             <line x2="64" y1="0" y2="-64" x1="64" />
             <circle r="16" cx="144" cy="-32" />
+        </blockdef>
+        <blockdef name="vgaclk">
+            <timestamp>2021-6-17T19:50:57</timestamp>
+            <rect width="336" x="64" y="-256" height="256" />
+            <line x2="0" y1="-224" y2="-224" x1="64" />
+            <line x2="0" y1="-32" y2="-32" x1="64" />
+            <line x2="464" y1="-224" y2="-224" x1="400" />
+            <line x2="464" y1="-160" y2="-160" x1="400" />
+            <line x2="464" y1="-96" y2="-96" x1="400" />
+            <line x2="464" y1="-32" y2="-32" x1="400" />
         </blockdef>
         <block symbolname="driver" name="XLXI_1">
             <blockpin signalname="XLXN_28" name="CLK_25MHz" />
@@ -163,18 +150,6 @@
             <blockpin signalname="XLXN_14(8:0)" name="BALL_Y(8:0)" />
             <blockpin signalname="XLXN_15(9:0)" name="PLATFORM_X(9:0)" />
         </block>
-        <block symbolname="clock" name="XLXI_4">
-            <blockpin signalname="XLXN_47" name="CLK_50MHz" />
-            <blockpin signalname="XLXN_28" name="CLK_25MHz" />
-        </block>
-        <block symbolname="pll" name="XLXI_5">
-            <blockpin signalname="XLXN_49" name="RST_IN" />
-            <blockpin signalname="CLK_12MHz" name="CLKIN_IN" />
-            <blockpin name="LOCKED_OUT" />
-            <blockpin signalname="XLXN_47" name="CLKFX_OUT" />
-            <blockpin name="CLKIN_IBUFG_OUT" />
-            <blockpin name="CLK0_OUT" />
-        </block>
         <block symbolname="color_converter" name="XLXI_6">
             <blockpin signalname="XLXN_36" name="VGA_R_IN" />
             <blockpin signalname="XLXN_37" name="VGA_G_IN" />
@@ -186,6 +161,14 @@
         <block symbolname="inv" name="XLXI_7">
             <blockpin signalname="RESET" name="I" />
             <blockpin signalname="XLXN_49" name="O" />
+        </block>
+        <block symbolname="vgaclk" name="XLXI_8">
+            <blockpin signalname="XLXN_49" name="RST_IN" />
+            <blockpin signalname="CLK_12MHz" name="CLKIN_IN" />
+            <blockpin name="LOCKED_OUT" />
+            <blockpin signalname="XLXN_28" name="CLKFX_OUT" />
+            <blockpin name="CLKIN_IBUFG_OUT" />
+            <blockpin name="CLK0_OUT" />
         </block>
     </netlist>
     <sheet sheetnum="1" width="3520" height="2720">
@@ -234,20 +217,6 @@
         </instance>
         <instance x="496" y="1152" name="XLXI_3" orien="R0">
         </instance>
-        <branch name="XLXN_28">
-            <wire x2="432" y1="832" y2="1184" x1="432" />
-            <wire x2="496" y1="1184" y2="1184" x1="432" />
-            <wire x2="1216" y1="832" y2="832" x1="432" />
-            <wire x2="1312" y1="432" y2="432" x1="1216" />
-            <wire x2="1968" y1="432" y2="432" x1="1312" />
-            <wire x2="1968" y1="432" y2="832" x1="1968" />
-            <wire x2="1984" y1="832" y2="832" x1="1968" />
-            <wire x2="1216" y1="432" y2="832" x1="1216" />
-            <wire x2="1312" y1="384" y2="384" x1="1248" />
-            <wire x2="1312" y1="384" y2="432" x1="1312" />
-        </branch>
-        <instance x="864" y="416" name="XLXI_4" orien="R0">
-        </instance>
         <instance x="2464" y="544" name="XLXI_6" orien="R0">
         </instance>
         <branch name="XLXN_36">
@@ -271,23 +240,15 @@
         <iomarker fontsize="28" x="3024" y="384" name="VGA_R(2:0)" orien="R0" />
         <iomarker fontsize="28" x="3024" y="448" name="VGA_G(2:0)" orien="R0" />
         <iomarker fontsize="28" x="3024" y="512" name="VGA_B(2:1)" orien="R0" />
-        <instance x="304" y="672" name="XLXI_5" orien="R0">
-        </instance>
         <branch name="CLK_12MHz">
             <wire x2="304" y1="640" y2="640" x1="208" />
         </branch>
         <iomarker fontsize="28" x="208" y="640" name="CLK_12MHz" orien="R180" />
-        <branch name="XLXN_47">
-            <wire x2="816" y1="512" y2="512" x1="768" />
-            <wire x2="816" y1="384" y2="512" x1="816" />
-            <wire x2="864" y1="384" y2="384" x1="816" />
-        </branch>
         <branch name="RESET">
             <wire x2="160" y1="1248" y2="1248" x1="144" />
             <wire x2="176" y1="1248" y2="1248" x1="160" />
         </branch>
         <instance x="176" y="1280" name="XLXI_7" orien="R0" />
-        <iomarker fontsize="28" x="144" y="1248" name="RESET" orien="R180" />
         <branch name="XLXN_49">
             <wire x2="304" y1="448" y2="448" x1="224" />
             <wire x2="224" y1="448" y2="736" x1="224" />
@@ -297,28 +258,34 @@
             <wire x2="448" y1="1232" y2="1232" x1="400" />
             <wire x2="448" y1="1232" y2="1248" x1="448" />
             <wire x2="496" y1="1248" y2="1248" x1="448" />
-            <wire x2="448" y1="1248" y2="1312" x1="448" />
-            <wire x2="448" y1="1312" y2="1376" x1="448" />
-            <wire x2="448" y1="1376" y2="1488" x1="448" />
+            <wire x2="448" y1="1248" y2="1488" x1="448" />
             <wire x2="1792" y1="1488" y2="1488" x1="448" />
             <wire x2="1984" y1="896" y2="896" x1="1792" />
             <wire x2="1792" y1="896" y2="1488" x1="1792" />
         </branch>
-        <iomarker fontsize="28" x="176" y="1312" name="ENCODER_LEFT" orien="R180" />
-        <iomarker fontsize="28" x="176" y="1376" name="ENCODER_RIGHT" orien="R180" />
         <branch name="ENCODER_LEFT">
-            <wire x2="240" y1="1312" y2="1312" x1="176" />
-            <wire x2="240" y1="1296" y2="1312" x1="240" />
-            <wire x2="464" y1="1296" y2="1296" x1="240" />
-            <wire x2="464" y1="1296" y2="1312" x1="464" />
-            <wire x2="496" y1="1312" y2="1312" x1="464" />
+            <wire x2="480" y1="1312" y2="1312" x1="288" />
+            <wire x2="496" y1="1312" y2="1312" x1="480" />
         </branch>
         <branch name="ENCODER_RIGHT">
-            <wire x2="240" y1="1376" y2="1376" x1="176" />
-            <wire x2="240" y1="1360" y2="1376" x1="240" />
-            <wire x2="464" y1="1360" y2="1360" x1="240" />
-            <wire x2="464" y1="1360" y2="1376" x1="464" />
-            <wire x2="496" y1="1376" y2="1376" x1="464" />
+            <wire x2="480" y1="1376" y2="1376" x1="304" />
+            <wire x2="496" y1="1376" y2="1376" x1="480" />
         </branch>
+        <instance x="304" y="672" name="XLXI_8" orien="R0">
+        </instance>
+        <branch name="XLXN_28">
+            <wire x2="432" y1="832" y2="1184" x1="432" />
+            <wire x2="496" y1="1184" y2="1184" x1="432" />
+            <wire x2="1216" y1="832" y2="832" x1="432" />
+            <wire x2="1216" y1="512" y2="512" x1="768" />
+            <wire x2="1216" y1="512" y2="832" x1="1216" />
+            <wire x2="1232" y1="512" y2="512" x1="1216" />
+            <wire x2="1968" y1="512" y2="512" x1="1232" />
+            <wire x2="1968" y1="512" y2="832" x1="1968" />
+            <wire x2="1984" y1="832" y2="832" x1="1968" />
+        </branch>
+        <iomarker fontsize="28" x="304" y="1376" name="ENCODER_RIGHT" orien="R180" />
+        <iomarker fontsize="28" x="288" y="1312" name="ENCODER_LEFT" orien="R180" />
+        <iomarker fontsize="28" x="144" y="1248" name="RESET" orien="R180" />
     </sheet>
 </drawing>

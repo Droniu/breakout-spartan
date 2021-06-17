@@ -7,7 +7,7 @@
 -- \   \   \/     Version : 14.7
 --  \   \         Application : sch2hdl
 --  /   /         Filename : breakout.vhf
--- /___/   /\     Timestamp : 06/12/2021 12:04:33
+-- /___/   /\     Timestamp : 06/17/2021 21:53:37
 -- \   \  /  \ 
 --  \___\/\___\ 
 --
@@ -50,7 +50,6 @@ architecture BEHAVIORAL of breakout is
    signal XLXN_36       : std_logic;
    signal XLXN_37       : std_logic;
    signal XLXN_38       : std_logic;
-   signal XLXN_47       : std_logic;
    signal XLXN_49       : std_logic;
    component driver
       port ( CLK_25MHz : in    std_logic; 
@@ -86,20 +85,6 @@ architecture BEHAVIORAL of breakout is
              PLATFORM_X    : out   std_logic_vector (9 downto 0));
    end component;
    
-   component clock
-      port ( CLK_50MHz : in    std_logic; 
-             CLK_25MHz : out   std_logic);
-   end component;
-   
-   component pll
-      port ( RST_IN          : in    std_logic; 
-             CLKIN_IN        : in    std_logic; 
-             LOCKED_OUT      : out   std_logic; 
-             CLKFX_OUT       : out   std_logic; 
-             CLKIN_IBUFG_OUT : out   std_logic; 
-             CLK0_OUT        : out   std_logic);
-   end component;
-   
    component color_converter
       port ( VGA_R_IN  : in    std_logic; 
              VGA_G_IN  : in    std_logic; 
@@ -114,6 +99,15 @@ architecture BEHAVIORAL of breakout is
              O : out   std_logic);
    end component;
    attribute BOX_TYPE of INV : component is "BLACK_BOX";
+   
+   component vgaclk
+      port ( RST_IN          : in    std_logic; 
+             CLKIN_IN        : in    std_logic; 
+             LOCKED_OUT      : out   std_logic; 
+             CLKFX_OUT       : out   std_logic; 
+             CLKIN_IBUFG_OUT : out   std_logic; 
+             CLK0_OUT        : out   std_logic);
+   end component;
    
 begin
    XLXI_1 : driver
@@ -147,18 +141,6 @@ begin
                 ENABLED_TILES(53 downto 0)=>XLXN_12(53 downto 0),
                 PLATFORM_X(9 downto 0)=>XLXN_15(9 downto 0));
    
-   XLXI_4 : clock
-      port map (CLK_50MHz=>XLXN_47,
-                CLK_25MHz=>XLXN_28);
-   
-   XLXI_5 : pll
-      port map (CLKIN_IN=>CLK_12MHz,
-                RST_IN=>XLXN_49,
-                CLKFX_OUT=>XLXN_47,
-                CLKIN_IBUFG_OUT=>open,
-                CLK0_OUT=>open,
-                LOCKED_OUT=>open);
-   
    XLXI_6 : color_converter
       port map (VGA_B_IN=>XLXN_38,
                 VGA_G_IN=>XLXN_37,
@@ -170,6 +152,14 @@ begin
    XLXI_7 : INV
       port map (I=>RESET,
                 O=>XLXN_49);
+   
+   XLXI_8 : vgaclk
+      port map (CLKIN_IN=>CLK_12MHz,
+                RST_IN=>XLXN_49,
+                CLKFX_OUT=>XLXN_28,
+                CLKIN_IBUFG_OUT=>open,
+                CLK0_OUT=>open,
+                LOCKED_OUT=>open);
    
 end BEHAVIORAL;
 

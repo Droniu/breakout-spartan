@@ -40,8 +40,8 @@ entity logic is
 
     Port (  CLK_25MHz        :     in  STD_LOGIC;
 				RESET : in STD_LOGIC;
-				ENCODER_LEFT : in STD_LOGIC;
-				ENCODER_RIGHT : in STD_LOGIC;
+				PL_LEFT : in STD_LOGIC;
+				PL_RIGHT : in STD_LOGIC;
 		    ENABLED_TILES : out STD_LOGIC_VECTOR ((TILE_ROWS * TILES_IN_ROW) - 1 downto 0);
 		    BALL_X :        out STD_LOGIC_VECTOR (PIX_X_BITS - 1 downto 0);
 		    BALL_Y :        out STD_LOGIC_VECTOR (PIX_Y_BITS - 1 downto 0);
@@ -63,7 +63,7 @@ architecture Behavioral of logic is
 	constant PLATFORM_HEIGHT : positive := 14;
 	constant PLATFORM_WIDTH : positive := 100;
 	constant PLATFORM_Y : positive := 440;
-	constant PLATFORM_PIX_PER_TICK : positive := 3;
+	constant PLATFORM_PIX_PER_TICK : positive := 2;
 	
 	constant INIT_BALL_X : positive := 150;
 	constant INIT_BALL_Y : positive := 367;
@@ -286,20 +286,20 @@ architecture Behavioral of logic is
 
         end process;
 		  
-		  platform_movement: process(ENCODER_LEFT, RESET)
+		  platform_movement: process(frame_clk, RESET)
 			begin
 				if RESET = '1' then
 					platform_x_int <= INIT_PLATFORM_X;
 					--encoder_ticks <= INIT_ENCODER_TICKS;
-				elsif(falling_edge(ENCODER_LEFT)) then
+				elsif(rising_edge(frame_clk)) then
 					--if ball_clk = '1' then
 						--platform_x_int <= platform_x_int + (encoder_ticks * PLATFORM_PIX_PER_TICK);
 						--encoder_ticks <= INIT_ENCODER_TICKS;
 					--end if;
-					if ENCODER_RIGHT = '1' then
+					if PL_RIGHT = '1' then
 						--encoder_ticks <= encoder_ticks - 1;
 						platform_x_int <= platform_x_int + PLATFORM_PIX_PER_TICK;
-					else
+					elsif PL_LEFT = '1' then
 						--encoder_ticks <= encoder_ticks + 1;
 						platform_x_int <= platform_x_int - PLATFORM_PIX_PER_TICK;
 					end if;
